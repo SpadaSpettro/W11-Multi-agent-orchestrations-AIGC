@@ -1,0 +1,404 @@
+{
+  "name": "W11 - Primo contatto (sotto-flusso)",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        112
+      ],
+      "id": "1a7b0cac-9c01-4b48-a090-87fcc7156f25",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "Qui arriva la chiamata del workflow principale e questo sotto-flusso ha inizio!",
+        "height": 240,
+        "width": 192,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        16
+      ],
+      "id": "5520fc93-94b7-471b-aec7-80e856aadefd",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "danielefiordilino54@gmail.com",
+          "mode": "list",
+          "cachedResultName": "danielefiordilino54@gmail.com"
+        },
+        "additionalFields": {
+          "attendees": [],
+          "description": "={{ $json.url }}",
+          "summary": "={{ $json.name }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        112
+      ],
+      "id": "e6b56844-9300-4563-8f41-fab7089404c9",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "gAfWcHLFXoqe9CuY",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "28326325-9286-8014-9273-fe500e0da51b",
+          "mode": "list",
+          "cachedResultName": "Database n8n",
+          "cachedResultUrl": "https://www.notion.so/28326325928680149273fe500e0da51b"
+        },
+        "title": "Campagna pubblicitaria - Primo contatto",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Descrizione|rich_text",
+              "textContent": "Fase di \"primo contatto\" della campagna pubblicitaria legata all'argomento \"lampadine innovative\"."
+            },
+            {
+              "key": "Data di creazione|date",
+              "date": "={{ $now }}"
+            }
+          ]
+        },
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "heading_2",
+              "textContent": "={{ $json.output.idea1_titolo }}"
+            },
+            {
+              "textContent": "={{ $json.output.idea1_sezione }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "={{ $json.output.idea2_titolo }}"
+            },
+            {
+              "textContent": "={{ $json.output.idea2_sezione }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "={{ $json.output.idea3_titolo }}"
+            },
+            {
+              "textContent": "={{ $json.output.idea3_domanda }}"
+            },
+            {
+              "type": "bulleted_list_item",
+              "textContent": "={{ $json.output.idea3_opzione1 }}"
+            },
+            {
+              "type": "bulleted_list_item",
+              "textContent": "={{ $json.output.idea3_opzione2 }}"
+            },
+            {
+              "type": "bulleted_list_item",
+              "textContent": "={{ $json.output.idea3_opzione3 }}"
+            },
+            {
+              "type": "bulleted_list_item",
+              "textContent": "={{ $json.output.idea3_opzione4 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        112
+      ],
+      "id": "91ad9964-9e43-4c50-b9f6-0bef37e9f3f6",
+      "name": "Create a database page",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "notionApi": {
+          "id": "X1SQhT3BoO32u9AE",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Il tuo obiettivo è generare i contenuti completi per la fase di \"primo contatto\", basandoti sulle seguenti richieste operative:\n\n--- RICHIESTE OPERATIVE (Fase Primo Contatto) ---\n{{ $json.piano_editoriale }}\n--- FINE RICHIESTE ---\n\nGenera tre contenuti distinti:\n1.  **Idea 1: Copy per Instagram/TikTok:** Un testo breve e coinvolgente, con 3 hashtag strategici, per un post che si concentra sull'atmosfera creata dalla luce, senza menzionare il prodotto.\n2.  **Idea 2: Soggetto e Corpo Email (Teaser):** Scrivi un soggetto email intrigante e il corpo di un breve teaser per una newsletter, mirando a stimolare la curiosità.\n3.  **Idea 3: Domanda di Sondaggio (Engagement):** Crea una domanda da lanciare in una Storia di Instagram o in un sondaggio su un blog, che prepari l'utente al concetto di 'migliore illuminazione'.\n\nApplica un tono di voce che sia **Accogliente e Curioso**, in linea con l'obiettivo di engagement iniziale.\n\nDopo aver generato il contenuto, ma priva di aver effettuato il parsing in output, usa il tool per richiedere la revisione del suddetto contenuto.",
+        "options": {
+          "systemMessage": "Sei un Creative Copywriter professionista e uno specialista in Social Media Strategy. Il tuo compito è generare contenuti creativi ed emozionali di alta qualità, focalizzati esclusivamente sulla fase di \"primo contatto\" (Awareness e Engagement iniziale).\nESEMPIO FORMATO DI OUTPUT:\n{\n\t\"idea1_titolo\": \"Idea 1: Copy per Instagram/TikTok\",\n\t\"idea1_sezione\": \"Testo breve e coinvolgente, con 3 hashtag strategici\",\n    \"idea2_titolo\": \"Idea 2: Soggetto e Corpo Email (Teaser)\",\n    \"idea2_sezione\": \"Soggetto email intrigante e corpo di un breve teaser per una newsletter\",\n    \"idea3_titolo\": \"Idea 3: Domanda di Sondaggio (Engagement)\",\n    \"idea3_domanda\": \"Domanda da lanciare in una Storia di Instagram o in un sondaggio su un blog\",\n    \"idea3_opzione1\": \"Opzione di risposta\",\n    \"idea3_opzione2\": \"Opzione di risposta\",\n    \"idea3_opzione3\": \"Opzione di risposta\",\n    \"idea3_opzione4\": \"Opzione di risposta\"\n}",
+          "maxIterations": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        272,
+        112
+      ],
+      "id": "b4638d3a-5246-411c-a520-a0706398f957",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        336
+      ],
+      "id": "20587a38-bd33-47c9-9d0f-6b1a8b204e51",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "M5znk5f1CeiRvNeL",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"idea1_titolo\": \"Idea 1: Copy per Instagram/TikTok\",\n\t\"idea1_sezione\": \"Testo breve e coinvolgente, con 3 hashtag strategici\",\n    \"idea2_titolo\": \"Idea 2: Soggetto e Corpo Email (Teaser)\",\n    \"idea2_sezione\": \"Soggetto email intrigante e corpo di un breve teaser per una newsletter\",\n    \"idea3_titolo\": \"Idea 3: Domanda di Sondaggio (Engagement)\",\n    \"idea3_domanda\": \"Domanda da lanciare in una Storia di Instagram o in un sondaggio su un blog\",\n    \"idea3_opzione1\": \"Opzione di risposta\",\n    \"idea3_opzione2\": \"Opzione di risposta\",\n    \"idea3_opzione3\": \"Opzione di risposta\",\n    \"idea3_opzione4\": \"Opzione di risposta\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        336
+      ],
+      "id": "36cd2593-59c9-4905-a365-b6f918e40f32",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool has the task of checking and refining the content generated by the main AI Agent node.\nThis tool MUST be used IMMEDIATELY after generating the requested content and MANDATORY before parsing it out.",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Esegui la revisione del seguente testo applicando scrupolosamente le linee guida per il Tono di Voce.\n\nTONO DI VOCE DA APPLICARE (Linee Guida):\n---\n{{ $json.brand_tone }}\n---\n\nRestituisci ESCLUSIVAMENTE il testo rivisto e finale che aderisce perfettamente alle linee guida del brand."
+            }
+          ]
+        },
+        "simplify": false,
+        "options": {
+          "systemMessage": "=Sei un'**Editor di Brand** e specialista di **Tone of Voice (ToV)**. Il tuo ruolo esclusivo è garantire la coerenza e l'aderenza ai contenuti di marketing forniti. Il tuo compito è analizzare un testo grezzo e revisionarlo interamente applicando rigorosamente le linee guida del brand-tone che ti verranno fornite.  REGOLE DI ESECUZIONE: 1.  Concentrati sulla personalità, lo stile e il vocabolario definito nelle linee guida del ToV. 2.  Assicurati che il contenuto finale sia in linea con gli obiettivi di comunicazione originali. 3.  Restituisci **ESCLUSIVAMENTE** il testo rivisto e corretto. 4.  NON includere commenti, introduzioni come \"Ecco il testo rivisto\", o spiegazioni sulla revisione. La tua risposta deve essere il contenuto finale pronto per la pubblicazione."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+      "typeVersion": 1,
+      "position": [
+        416,
+        336
+      ],
+      "id": "fd1537a0-5e2b-4519-be8d-7b1aabba3839",
+      "name": "Agente revisore del contenuto",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "M5znk5f1CeiRvNeL",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "Un nodo IA utilizzato come Tool che revisiona il contenuto generato dal nodo principale."
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Esegui il parsing di questi dati: {{ JSON.stringify($json.output) }}.\nIl formato di output dovrà essere quello specificato dall'Output Parser.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        624,
+        112
+      ],
+      "id": "d73ed178-f6ff-4c0f-aa98-8859253f852e",
+      "name": "Parser Chain"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "brand_tone": "Innovativo, Sostenibile, Benessere.\nManifesto: Illuminare il futuro, rispettando il presente, migliorando il tuo benessere visivo.\nStile: Comunica con il \"tu\" per un approccio diretto e personale.",
+          "piano_editoriale": "Fase 1: Engagement Iniziale (Awareness)\nObiettivo: Ispirare e far riflettere sull'importanza della luce.\nContenuto: \"Hai mai pensato a quanto la luce influenzi la tua giornata? Immagina spazi che si adattano al tuo umore, che migliorano la tua concentrazione e proteggono i tuoi occhi. Inizia un viaggio con noi alla scoperta del potere della luce, senza ancora svelare la nostra soluzione, ma concentrandoci sull'esperienza e sui problemi risolvibili con un'illuminazione consapevole.\"\n\nFase 2: Hype (Consideration)\nObiettivo: Generare curiosità e rivelare i differenziatori chiave.\nContenuto: \"È tempo di rivelare la magia dietro la luce perfetta. Ti presentiamo un design rivoluzionario che unisce estetica minimalista e tecnologia all'avanguardia. Scopri i materiali sostenibili che utilizziamo, i segreti della nostra luce senza sfarfallio e come abbiamo ingegnerizzato il benessere visivo in ogni singolo watt. Ti portiamo in un'anteprima esclusiva sul \"dietro le quinte\" della nostra produzione, mostrando l'attenzione al dettaglio e l'impegno per la sostenibilità.\"\n\nFase 3: Pre-Lancio (Conversion Warm-up)\nObiettivo: Creare urgenza, esclusività e preparare alla conversione.\nContenuto: \"Il futuro dell'illuminazione è quasi qui. Manca pochissimo al lancio ufficiale della nostra nuova linea di lampadine innovative! Entra nella nostra lista d'attesa VIP per accedere in anteprima al lancio, ricevere offerte esclusive e non perdere l'opportunità di trasformare radicalmente i tuoi spazi con un'illuminazione che si prende cura di te e del pianeta. Il tempo stringe, l'innovazione ti aspetta. Non farti sfuggire questa luce.\"\n"
+        },
+        "binary": {}
+      }
+    ],
+    "AI Agent": [
+      {
+        "json": {
+          "output": {
+            "idea1_titolo": "Idea 1: Copy per Instagram/TikTok",
+            "idea1_sezione": "Ti sei mai soffermato a pensare come un raggio di luce possa trasformare l'intera giornata? ✨ Immagina di entrare in un ambiente dove ogni sfumatura di luce si adatta perfettamente al tuo stato d'animo, migliora la tua concentrazione e coccola i tuoi occhi. Iniziamo insieme un piccolo viaggio alla scoperta del suo incredibile potere... pronto a vedere la luce sotto una nuova prospettiva? 😉 #PotereDellaLuce #AtmosfereDiLuce #BenessereVisivo",
+            "idea2_titolo": "Idea 2: Soggetto e Corpo Email (Teaser)",
+            "idea2_sezione": "Soggetto: La luce: più di quanto immagini? Scopri il suo vero potere!\n\nCorpo: Ciao! Ti sei mai chiesto quanto la luce possa davvero fare la differenza nella tua vita quotidiana? Non parliamo solo di illuminare una stanza, ma di creare un'atmosfera, migliorare il tuo benessere e persino proteggere i tuoi occhi. Siamo qui per iniziare un viaggio affascinante alla scoperta di un'illuminazione più consapevole e intelligente. Preparati a vedere le cose sotto una nuova... luce! 😉 Resta sintonizzato per scoprire di più.",
+            "idea3_titolo": "Idea 3: Domanda di Sondaggio (Engagement)",
+            "idea3_domanda": "Come ti senti riguardo all'illuminazione dei tuoi spazi? Ti senti mai...",
+            "idea3_opzione1": "Perfettamente a tuo agio e ispirato!",
+            "idea3_opzione2": "Spesso affaticato o poco concentrato.",
+            "idea3_opzione3": "Indifferente, non ci ho mai pensato.",
+            "idea3_opzione4": "Pronto a scoprire un mondo nuovo!"
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Parser Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Parser Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parser Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente revisore del contenuto": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Chain": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c0cd38aa-4222-4348-810c-ff2d9cf704c5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "285e6b7035d57255323414f2adfae0530b9d9fde4f34f40ef0775256340f9783"
+  },
+  "id": "T3NSerAxU2YhBHGy",
+  "tags": [
+    {
+      "updatedAt": "2026-04-04T23:05:54.660Z",
+      "createdAt": "2026-04-04T23:05:54.660Z",
+      "id": "TOSUCdPEgLlufg6Q",
+      "name": "Google Calendar"
+    },
+    {
+      "updatedAt": "2026-04-02T03:02:21.287Z",
+      "createdAt": "2026-04-02T03:02:21.287Z",
+      "id": "gqH2eJsEuq2iGZkb",
+      "name": "Notion"
+    },
+    {
+      "updatedAt": "2026-04-02T03:02:46.710Z",
+      "createdAt": "2026-04-02T03:02:46.710Z",
+      "id": "oR1knSWoKLbEg04u",
+      "name": "IA"
+    },
+    {
+      "updatedAt": "2026-04-05T05:27:11.862Z",
+      "createdAt": "2026-04-04T22:54:02.888Z",
+      "id": "rk5ptMN2qRcFq2Ao",
+      "name": "Sotto-flussi"
+    }
+  ]
+}

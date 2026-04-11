@@ -1,0 +1,285 @@
+{
+  "name": "W11 (1) - Orchestrazioni multi-agente - Daniele Fiordilino",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -48,
+        144
+      ],
+      "id": "3f683edf-874a-4708-997a-43aa9a9b5006",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $json.ID_Documento }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        224
+      ],
+      "id": "4eb5b756-e1b7-461c-ae43-a41ebd929712",
+      "name": "Leggi documento",
+      "executeOnce": true,
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "jXy8nfkZFwpWbfGV",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "In questo punto vengono recuperate le informazioni.",
+        "height": 208,
+        "width": 160,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        64
+      ],
+      "id": "eda54038-a920-4759-be49-b3dbe1e9f2ff",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Questi 3 nodi richiamano 3 sotto-flussi per l'elaborazione delle informazioni recuperate, in un Parallelization indiretto.",
+        "height": 656,
+        "width": 224,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        112,
+        -144
+      ],
+      "id": "e477af76-6a2d-4635-9308-80f23885e8e9",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Pk08vPG3VEj4texW",
+          "mode": "list"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        144
+      ],
+      "id": "d3546ead-e149-4ffb-9f46-0fe428664b21",
+      "name": "Recupera dati"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "T3NSerAxU2YhBHGy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/T3NSerAxU2YhBHGy",
+          "cachedResultName": "W11 - Primo contatto (sotto-flusso)"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            "primo_contatto"
+          ],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        336
+      ],
+      "id": "1f4979fe-cb31-4350-93e5-b65c395366fe",
+      "name": "Primo contatto (sotto-flusso)"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "nOiG3ShMPeuuKhvp",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/nOiG3ShMPeuuKhvp",
+          "cachedResultName": "W11 - Mantenere hype (sotto-flusso)"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            "Richiesta"
+          ],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        144
+      ],
+      "id": "c94547e3-285a-4ef2-aa46-adca9d962565",
+      "name": "Mantenere hype (sotto-flusso)"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "uXCFtN4u03j5SLw6",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/uXCFtN4u03j5SLw6",
+          "cachedResultName": "W11 - Pre-lancio (sotto-flusso)"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            "Richiesta"
+          ],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        -48
+      ],
+      "id": "ab54aefe-adf2-4283-bc65-ed432fd07a3b",
+      "name": "Pre-lancio (sotto-flusso)"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        144
+      ],
+      "id": "9ab3c352-2c9a-49c5-931c-52800e090a53",
+      "name": "Start"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Pre-lancio (sotto-flusso)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mantenere hype (sotto-flusso)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Primo contatto (sotto-flusso)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leggi documento": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recupera dati": {
+      "main": [
+        [
+          {
+            "node": "Leggi documento",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Recupera dati",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "45609291-bb92-415e-b0d1-83161aeb380d",
+  "meta": {
+    "instanceId": "285e6b7035d57255323414f2adfae0530b9d9fde4f34f40ef0775256340f9783"
+  },
+  "id": "7rs0bQc0bX66jNnr",
+  "tags": [
+    {
+      "updatedAt": "2026-04-04T22:53:31.188Z",
+      "createdAt": "2026-04-04T22:53:31.188Z",
+      "id": "QtufuJPgy1naa6cW",
+      "name": "Data Table"
+    },
+    {
+      "updatedAt": "2026-04-05T05:27:11.862Z",
+      "createdAt": "2026-04-04T22:54:02.888Z",
+      "id": "rk5ptMN2qRcFq2Ao",
+      "name": "Sotto-flussi"
+    },
+    {
+      "updatedAt": "2026-04-03T22:02:30.420Z",
+      "createdAt": "2026-04-03T22:02:30.420Z",
+      "id": "vEzaPJhvxUWx7lot",
+      "name": "Google Docs"
+    }
+  ]
+}

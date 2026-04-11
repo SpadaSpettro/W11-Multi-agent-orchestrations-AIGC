@@ -1,0 +1,394 @@
+{
+  "name": "W11 - Mantenere hype (sotto-flusso)",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        112
+      ],
+      "id": "53a70ba8-97f7-4013-b3ee-1d6895b01e6b",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "Qui arriva la chiamata del workflow principale e questo sotto-flusso ha inizio!",
+        "height": 240,
+        "width": 192,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        16
+      ],
+      "id": "d70fc165-f47b-47f0-9d5e-db6cd0842fae",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "danielefiordilino54@gmail.com",
+          "mode": "list",
+          "cachedResultName": "danielefiordilino54@gmail.com"
+        },
+        "additionalFields": {
+          "attendees": [],
+          "description": "={{ $json.url }}",
+          "summary": "={{ $json.name }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        112
+      ],
+      "id": "72461132-50f7-4021-a576-52924cc50433",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "gAfWcHLFXoqe9CuY",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "28326325-9286-8014-9273-fe500e0da51b",
+          "mode": "list",
+          "cachedResultName": "Database n8n",
+          "cachedResultUrl": "https://www.notion.so/28326325928680149273fe500e0da51b"
+        },
+        "title": "Campagna pubblicitaria - Mantenere hype",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Descrizione|rich_text",
+              "textContent": "Fase di \"mantenere hype\" della campagna pubblicitaria legata all'argomento \"lampadine innovative\"."
+            },
+            {
+              "key": "Data di creazione|date",
+              "date": "={{ $now }}"
+            }
+          ]
+        },
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "heading_2",
+              "textContent": "={{ $json.output.idea1_titolo }}"
+            },
+            {
+              "textContent": "={{ $json.output.idea1_sezione }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "={{ $json.output.idea2_titolo }}"
+            },
+            {
+              "textContent": "={{ $json.output.idea2_sezione }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "={{ $json.output.idea3_titolo }}"
+            },
+            {
+              "type": "bulleted_list_item",
+              "textContent": "={{ $json.output.idea3_domanda1 }}"
+            },
+            {
+              "type": "bulleted_list_item",
+              "textContent": "={{ $json.output.idea3_domanda2 }}"
+            },
+            {
+              "type": "bulleted_list_item",
+              "textContent": "={{ $json.output.idea3_domanda3 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        112
+      ],
+      "id": "3e8bf4b8-2a05-482d-8375-f3d36714a7be",
+      "name": "Create a database page",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "notionApi": {
+          "id": "X1SQhT3BoO32u9AE",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Il tuo obiettivo è generare i contenuti completi per la fase di \"mantenere hype\", basandoti sulle seguenti richieste operative:\n\n--- RICHIESTE OPERATIVE (Fase Mantenere Hype) ---\n{{ $json.piano_editoriale }}\n--- FINE RICHIESTE ---\n\nGenera tre contenuti distinti e pronti all'uso:\n1.  **Idea 1: Script per Video \"Dietro le Quinte\":** Scrivi una bozza di script (max 60 secondi) per un breve video che riveli un dettaglio del processo di design o la tecnologia innovativa della lampadina. Lo script deve terminare con una domanda di coinvolgimento.\n2.  **Idea 2: Post Educativo per LinkedIn/Blog:** Scrivi un testo (max 500 caratteri) che spieghi i benefici reali dell'innovazione della lampadina sulla qualità della vita o sul risparmio energetico.\n3.  **Idea 3: Bozza di Sondaggio/Quiz Interattivo:** Crea un breve quiz o sondaggio in 3 domande per una Storia/Email interattiva, il cui scopo è educare l'utente sui problemi che il nuovo prodotto risolve (es. colore della luce, consumo).\n\nApplica un tono di voce che sia **Informativo, Appassionato e Trasparente**, in linea con l'obiettivo di costruire fiducia e desiderio.\n\nDopo aver generato il contenuto, ma priva di aver effettuato il parsing in output, usa il tool per richiedere la revisione del suddetto contenuto.",
+        "options": {
+          "systemMessage": "Sei un Copywriter e Content Creator specializzato nella fase di 'Consideration' e 'Hype'. Il tuo compito è generare contenuti dettagliati, educativi ed emozionali volti a mantenere l'utente ingaggiato e a giustificare il valore del prodotto.\nESEMPIO FORMATO DI OUTPUT:\n{\n\t\"idea1_titolo\": \"Idea 1: Script per Video 'Dietro le Quinte'\",\n\t\"idea1_sezione\": \"Una bozza di script (max 60 secondi) per un breve video\",\n    \"idea2_titolo\": \"Idea 2: Post Educativo per LinkedIn/Blog\",\n    \"idea2_sezione\": \"Un testo (max 500 caratteri) che spieghi i benefici reali dell'innovazione della lampadina\",\n    \"idea3_titolo\": \"Idea 3: Bozza di Sondaggio/Quiz Interattivo\",\n    \"idea3_domanda1\": \"Domanda per una Storia/Email interattiva\",\n    \"idea3_domanda2\": \"Domanda per una Storia/Email interattiva\",\n    \"idea3_domanda3\": \"Domanda per una Storia/Email interattiva\"\n}",
+          "maxIterations": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        272,
+        112
+      ],
+      "id": "ba4e1d3b-b6f2-439e-95b2-597f65ae479e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        336
+      ],
+      "id": "e7d5d65d-c0e1-45d9-aa0a-8481ce1cfc4f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "M5znk5f1CeiRvNeL",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"idea1_titolo\": \"Idea 1: Script per Video 'Dietro le Quinte'\",\n\t\"idea1_sezione\": \"Una bozza di script (max 60 secondi) per un breve video\",\n    \"idea2_titolo\": \"Idea 2: Post Educativo per LinkedIn/Blog\",\n    \"idea2_sezione\": \"Un testo (max 500 caratteri) che spieghi i benefici reali dell'innovazione della lampadina\",\n    \"idea3_titolo\": \"Idea 3: Bozza di Sondaggio/Quiz Interattivo\",\n    \"idea3_domanda1\": \"Domanda per una Storia/Email interattiva\",\n    \"idea3_domanda2\": \"Domanda per una Storia/Email interattiva\",\n    \"idea3_domanda3\": \"Domanda per una Storia/Email interattiva\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        336
+      ],
+      "id": "15913d51-549f-4d39-b78d-c939bf3eac96",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool has the task of checking and refining the content generated by the main AI Agent node.\nThis tool MUST be used IMMEDIATELY after generating the requested content and MANDATORY before parsing it out.",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Esegui la revisione del seguente testo applicando scrupolosamente le linee guida per il Tono di Voce.\n\nTONO DI VOCE DA APPLICARE (Linee Guida):\n---\n{{ $json.brand_tone }}\n---\n\nRestituisci ESCLUSIVAMENTE il testo rivisto e finale che aderisce perfettamente alle linee guida del brand."
+            }
+          ]
+        },
+        "simplify": false,
+        "options": {
+          "systemMessage": "=Sei un'**Editor di Brand** e specialista di **Tone of Voice (ToV)**. Il tuo ruolo esclusivo è garantire la coerenza e l'aderenza ai contenuti di marketing forniti. Il tuo compito è analizzare un testo grezzo e revisionarlo interamente applicando rigorosamente le linee guida del brand-tone che ti verranno fornite.  REGOLE DI ESECUZIONE: 1.  Concentrati sulla personalità, lo stile e il vocabolario definito nelle linee guida del ToV. 2.  Assicurati che il contenuto finale sia in linea con gli obiettivi di comunicazione originali. 3.  Restituisci **ESCLUSIVAMENTE** il testo rivisto e corretto. 4.  NON includere commenti, introduzioni come \"Ecco il testo rivisto\", o spiegazioni sulla revisione. La tua risposta deve essere il contenuto finale pronto per la pubblicazione."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGeminiTool",
+      "typeVersion": 1,
+      "position": [
+        416,
+        336
+      ],
+      "id": "e4c1bc3b-7cb3-4d8e-a04d-ffae8186c99c",
+      "name": "Agente revisore del contenuto",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "M5znk5f1CeiRvNeL",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "Un nodo IA utilizzato come Tool che revisiona il contenuto generato dal nodo principale."
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Esegui il parsing di questi dati: {{ JSON.stringify($json.output) }}.\nIl formato di output dovrà essere quello specificato dall'Output Parser.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        624,
+        112
+      ],
+      "id": "95529a09-57d4-4544-bbf7-d08d4592f6af",
+      "name": "Parser Chain"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "brand_tone": "Innovativo, Sostenibile, Benessere.\nManifesto: Illuminare il futuro, rispettando il presente, migliorando il tuo benessere visivo.\nStile: Comunica con il \"tu\" per un approccio diretto e personale.",
+          "piano_editoriale": "Fase 1: Engagement Iniziale (Awareness)\nObiettivo: Ispirare e far riflettere sull'importanza della luce.\nContenuto: \"Hai mai pensato a quanto la luce influenzi la tua giornata? Immagina spazi che si adattano al tuo umore, che migliorano la tua concentrazione e proteggono i tuoi occhi. Inizia un viaggio con noi alla scoperta del potere della luce, senza ancora svelare la nostra soluzione, ma concentrandoci sull'esperienza e sui problemi risolvibili con un'illuminazione consapevole.\"\n\nFase 2: Hype (Consideration)\nObiettivo: Generare curiosità e rivelare i differenziatori chiave.\nContenuto: \"È tempo di rivelare la magia dietro la luce perfetta. Ti presentiamo un design rivoluzionario che unisce estetica minimalista e tecnologia all'avanguardia. Scopri i materiali sostenibili che utilizziamo, i segreti della nostra luce senza sfarfallio e come abbiamo ingegnerizzato il benessere visivo in ogni singolo watt. Ti portiamo in un'anteprima esclusiva sul \"dietro le quinte\" della nostra produzione, mostrando l'attenzione al dettaglio e l'impegno per la sostenibilità.\"\n\nFase 3: Pre-Lancio (Conversion Warm-up)\nObiettivo: Creare urgenza, esclusività e preparare alla conversione.\nContenuto: \"Il futuro dell'illuminazione è quasi qui. Manca pochissimo al lancio ufficiale della nostra nuova linea di lampadine innovative! Entra nella nostra lista d'attesa VIP per accedere in anteprima al lancio, ricevere offerte esclusive e non perdere l'opportunità di trasformare radicalmente i tuoi spazi con un'illuminazione che si prende cura di te e del pianeta. Il tempo stringe, l'innovazione ti aspetta. Non farti sfuggire questa luce.\"\n"
+        }
+      }
+    ],
+    "AI Agent": [
+      {
+        "json": {
+          "output": {
+            "idea1_titolo": "Idea 1: Script per Video 'Dietro le Quinte'",
+            "idea1_sezione": "Voce Narrante (Calda, trasparente): \"Dietro ogni innovazione, c'è una storia di passione e precisione. Qui, nel cuore del nostro laboratorio, non progettiamo semplici lampadine. Ingegnerizziamo benessere.\\n\\n(Scena: Focus su un dettaglio del design, materiali sostenibili, o un microchip.)\\n\\nVoce Narrante: \"Abbiamo studiato ogni curva, ogni componente, per creare una luce che non solo illumina, ma cura. Materiali sostenibili scelti con attenzione, per un impatto minimo sul pianeta. E poi c'è lei: la nostra tecnologia anti-sfarfallio, il segreto per un comfort visivo senza precedenti, che protegge i tuoi occhi e migliora la tua concentrazione. Ogni watt è un piccolo capolavoro di efficienza e design. Siamo ossessionati dai dettagli, perché sappiamo che la vera innovazione si nasconde lì.\\n\\n(Scena: Il designer sorride, mostrando la lampadina finita.)\\n\\nVoce Narrante: \"Questa non è solo una lampadina. È il futuro della tua luce. E tu, sei pronto a vivere un'esperienza luminosa che va oltre ogni aspettativa?\"",
+            "idea2_titolo": "Idea 2: Post Educativo per LinkedIn/Blog",
+            "idea2_sezione": "Hai mai pensato a quanto una luce di qualità possa migliorare la tua vita? La nostra innovazione va oltre l'illuminazione. Con un design all'avanguardia e tecnologia anti-sfarfallio, abbiamo ingegnerizzato il benessere visivo in ogni singolo watt. Meno affaticamento, più concentrazione e un significativo risparmio energetico grazie ai nostri materiali sostenibili. Non è solo luce, è un investimento nel tuo comfort e nel futuro del pianeta. Scopri la differenza.",
+            "idea3_titolo": "Idea 3: Bozza di Sondaggio/Quiz Interattivo",
+            "idea3_domanda1": "Sapevi che una luce tremolante (sfarfallio) può causare mal di testa e affaticamento visivo? 💡 (Sì/No/Non ci avevo mai pensato)",
+            "idea3_domanda2": "Quanto è importante per te che i prodotti che acquisti siano realizzati con materiali sostenibili? 🌱 (Molto/Abbastanza/Non troppo)",
+            "idea3_domanda3": "Immagina una luce che si adatta perfettamente al tuo umore e protegge i tuoi occhi. Quanto saresti disposto a innovare i tuoi spazi? ✨ (Tanto/Un po'/Preferisco la tradizione)"
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parser Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Parser Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Parser Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente revisore del contenuto": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser Chain": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1ae0dba7-1359-4ae2-b075-e1d9deddcefa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "285e6b7035d57255323414f2adfae0530b9d9fde4f34f40ef0775256340f9783"
+  },
+  "id": "nOiG3ShMPeuuKhvp",
+  "tags": [
+    {
+      "updatedAt": "2026-04-04T23:05:54.660Z",
+      "createdAt": "2026-04-04T23:05:54.660Z",
+      "id": "TOSUCdPEgLlufg6Q",
+      "name": "Google Calendar"
+    },
+    {
+      "updatedAt": "2026-04-02T03:02:21.287Z",
+      "createdAt": "2026-04-02T03:02:21.287Z",
+      "id": "gqH2eJsEuq2iGZkb",
+      "name": "Notion"
+    },
+    {
+      "updatedAt": "2026-04-02T03:02:46.710Z",
+      "createdAt": "2026-04-02T03:02:46.710Z",
+      "id": "oR1knSWoKLbEg04u",
+      "name": "IA"
+    },
+    {
+      "updatedAt": "2026-04-05T05:27:11.862Z",
+      "createdAt": "2026-04-04T22:54:02.888Z",
+      "id": "rk5ptMN2qRcFq2Ao",
+      "name": "Sotto-flussi"
+    }
+  ]
+}

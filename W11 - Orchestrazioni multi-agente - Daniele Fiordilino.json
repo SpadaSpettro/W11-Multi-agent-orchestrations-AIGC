@@ -1,0 +1,488 @@
+{
+  "name": "W11 - Orchestrazioni multi-agente - Daniele Fiordilino",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        576
+      ],
+      "id": "dae143c1-530e-4be0-a2e7-639bbcbd169e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "M5znk5f1CeiRvNeL",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"brand_tone\": \"Il tono è Caldo, Innovativo e Minimalista.\\nManifesto: Più luce, meno consumo.\\nStile: Amichevole ma autorevole.\",\n  \"piano_editoriale_fase1\": \"Awareness\\nObiettivo: Ispirare.\\nCanali: Instagram.\\n\\n\",\n  \"piano_editoriale_fase2\": \"Hype\\nObiettivo: Educare.\\nCanali: Email.\\n\\n\",\n  \"piano_editoriale_fase3\": \"Pre-Lancio\\nObiettivo: Convertire.\\nCanali: Sito Web.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        576
+      ],
+      "id": "7037688e-d7d7-4a6b-8e84-cb464c18a99a",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "folderId": "1Gls0TOSdaLzcFP5gtwTjN6CiPvKBjVV8",
+        "title": "W11 - Piano editoriale"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        0,
+        48
+      ],
+      "id": "7747ad3c-ab08-45e8-bd9b-465d7041161b",
+      "name": "Create a document",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "jXy8nfkZFwpWbfGV",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        288,
+        96
+      ],
+      "id": "74754811-b332-4fe1-a8d8-f57ba386735d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $json.output.piano_editoriale }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        512,
+        0
+      ],
+      "id": "47318959-9251-422b-b85a-8dc5ade27bad",
+      "name": "Scrivi sul documento",
+      "retryOnFail": false,
+      "maxTries": 2,
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "jXy8nfkZFwpWbfGV",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Genera una strategia per una campagna pubblicitaria di una nuova linea di \"Lampadine Innovative\" (focus su design, sostenibilità e benessere visivo).\n\nCompila i campi del JSON seguendo queste indicazioni per il contenuto:\n\nCAMPO \"brand_tone\":\n- Inserisci 3 aggettivi (es. Accogliente, Visionario, etc.).\n- Un breve Manifesto del Brand.\n- Lo stile di comunicazione (es. usa il \"tu\" o il \"lei\").\n\nCAMPO \"piano_editoriale\":\nSviluppa un testo unico strutturato che copra queste 3 fasi temporali:\n1. Engagement Iniziale (Awareness): Parlare di atmosfera e problemi di luce senza svelare il prodotto.\n2. Hype (Consideration): Svelare dettagli tecnici, design e \"dietro le quinte\".\n3. Pre-Lancio (Conversion Warm-up): Countdown, liste d'attesa e FOMO.\n\nAssicurati che il contenuto del campo \"piano_editoriale\" sia ben leggibile andando a capo tra una fase e l'altra.",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Sei un Senior Marketing Strategist esperto in automazione dati. Il tuo compito è generare contenuti strategici e restituirli ESCLUSIVAMENTE in formato JSON valido.  ISTRUZIONI DI FORMATTAZIONE RIGIDE: 1. Restituisci SOLO l'oggetto JSON grezzo. 2. NON utilizzare blocchi di codice Markdown (niente ```json o ```). 3. NON scrivere testo introduttivo o conclusivo prima o dopo il JSON. 4. Usa l'escape `\\n` per i ritorni a capo all'interno delle stringhe di testo. 5. Usa l'escape `\\\"` per le virgolette doppie all'interno del testo.  ESEMPIO ESATTO DEL FORMATO DI OUTPUT RICHIESTO: {   \"brand_tone\": \"Il tono è Caldo, Innovativo e Minimalista.\\nManifesto: Più luce, meno consumo.\\nStile: Amichevole ma autorevole.\", \"piano_editoriale_fase1\": \"Awareness\\nObiettivo: Ispirare.\\nCanali: Instagram.\\n\\n\", \"piano_editoriale_fase2\": \"Hype\\nObiettivo: Educare.\\nCanali: Email.\\n\\n\", \"piano_editoriale_fase3\": \"Pre-Lancio\\nObiettivo: Convertire.\\nCanali: Sito Web.\" }"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -64,
+        352
+      ],
+      "id": "21a21a5d-dfb2-4d3a-8db4-8d676f5a4b5e",
+      "name": "Agente 1",
+      "executeOnce": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        192
+      ],
+      "id": "6f558880-9398-44df-b70c-718257fece36",
+      "name": "Start",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "content": "Questo nodo sfrutta la funzionalità Data Table di n8n per creare un record con le informazioni utili da trasferire ad altri flussi.",
+        "height": 112,
+        "width": 208,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        672,
+        192
+      ],
+      "id": "2047ef93-bebc-493a-870a-76d84a41788f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Pk08vPG3VEj4texW",
+          "mode": "list"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ID_Documento",
+              "condition": "neq",
+              "keyValue": "={{ $json.id }}"
+            },
+            {
+              "keyName": "brand_tone",
+              "condition": "neq",
+              "keyValue": "={{ $json.output.brand_tone }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID_Documento": "={{ $json.id }}",
+            "brand_tone": "={{ $json.output.brand_tone }}"
+          },
+          "matchingColumns": [
+            "ID_Documento"
+          ],
+          "schema": [
+            {
+              "id": "ID_Documento",
+              "displayName": "ID_Documento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "brand_tone",
+              "displayName": "brand_tone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        512,
+        208
+      ],
+      "id": "3ab04887-6874-4bcf-a629-a246074eb78d",
+      "name": "Salva dati"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "28326325-9286-8014-9273-fe500e0da51b",
+          "mode": "list",
+          "cachedResultName": "Database n8n",
+          "cachedResultUrl": "https://www.notion.so/28326325928680149273fe500e0da51b"
+        },
+        "title": "Brand tone e piano editoriale campagna pubblicitaria",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Descrizione|rich_text",
+              "textContent": "Brand tone e piano editoriale per una campagna pubblicitaria legata all'argomento \"lampadine innovative\"."
+            },
+            {
+              "key": "Data di creazione|date",
+              "date": "={{ $now }}"
+            }
+          ]
+        },
+        "blockUi": {
+          "blockValues": [
+            {
+              "type": "heading_2",
+              "textContent": "=Brand tone"
+            },
+            {
+              "textContent": "={{ $json.output.brand_tone }}"
+            },
+            {
+              "type": "heading_2",
+              "textContent": "Piano editoriale"
+            },
+            {
+              "type": "numbered_list_item",
+              "textContent": "={{ $json.output.piano_editoriale_fase1 }}"
+            },
+            {
+              "type": "numbered_list_item",
+              "textContent": "={{ $json.output.piano_editoriale_fase2 }}"
+            },
+            {
+              "type": "numbered_list_item",
+              "textContent": "={{ $json.output.piano_editoriale_fase3 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        400
+      ],
+      "id": "6fd1ec5a-feb6-4560-83f1-6455840e0216",
+      "name": "Create a database page",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "notionApi": {
+          "id": "X1SQhT3BoO32u9AE",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "danielefiordilino54@gmail.com",
+          "mode": "list",
+          "cachedResultName": "danielefiordilino54@gmail.com"
+        },
+        "additionalFields": {
+          "description": "={{ $json.url }}",
+          "summary": "={{ $json.name }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        400
+      ],
+      "id": "bbc74acf-3f2c-483c-873e-a6ffb9d9a930",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "gAfWcHLFXoqe9CuY",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Start": [
+      {
+        "json": {},
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Agente 1": [
+      {
+        "json": {
+          "output": {
+            "brand_tone": "Illuminato, Conscio, Avanguardista.\nManifesto: \"Illuminare il tuo mondo con bellezza, rispetto e chiarezza.\"\nStile: Il tono è diretto e ispirazionale, usando il \"tu\" per creare una connessione personale.",
+            "piano_editoriale_fase1": "Engagement Iniziale (Awareness):\nTi sei mai fermato a pensare a come la luce modella ogni istante della tua giornata? Dalla carica energizzante del mattino al relax serale, la luce è molto più di una semplice illuminazione. Influisce sul tuo umore, sulla tua produttività e sul tuo benessere.\n\nMa quanto è davvero \"giusta\" la luce che ti circonda? Quante volte hai desiderato un ambiente più armonioso, meno affaticante per gli occhi, o semplicemente più bello da vivere? La soluzione non è solo \"accendere una luce\", ma vivere un'esperienza illuminata. Rifletti su come potresti migliorare i tuoi spazi con un approccio più consapevole all'illuminazione. Senza rivelare nulla ancora, ti stiamo invitando a immaginare un futuro dove la luce non è un dato di fatto, ma una scelta di benessere.",
+            "piano_editoriale_fase2": "Hype (Consideration):\nEcco dove la visione prende forma. Non è una semplice lampadina, è una rivoluzione nel modo in cui percepiamo e interagiamo con la luce.\n\nImmergiti nel cuore della nostra innovazione: un design che sposa estetica e funzionalità, trasformando un oggetto quotidiano in un elemento d'arredo. Abbiamo curato ogni linea, ogni curva, perché crediamo che la bellezza debba essere accessibile e funzionale. Ma non è solo l'aspetto: sotto la superficie si cela una tecnologia all'avanguardia. Utilizziamo materiali sostenibili e processi produttivi etici, perché crediamo in un futuro più verde. E per i tuoi occhi? Abbiamo sviluppato uno spettro cromatico che riproduce la luce naturale, minimizzando lo sfarfallio e riducendo l'affaticamento visivo. Ti portiamo \"dietro le quinte\" della nostra creazione, mostrandoti la passione e l'ingegneria che hanno dato vita a questa nuova esperienza di illuminazione. Un'illuminazione che si prende cura di te e del pianeta.",
+            "piano_editoriale_fase3": "Pre-Lancio (Conversion Warm-up):\nIl futuro dell'illuminazione è quasi qui. Sei pronto a vivere la luce come mai prima d'ora?\n\nManca davvero poco al lancio della nostra nuova linea di lampadine innovative. Questo non è un semplice prodotto, ma un invito a ripensare la tua relazione con la luce, con il design e con il benessere. Per assicurarti di essere tra i primi a scoprire questa rivoluzione e ad accedere a offerte esclusive, iscriviti subito alla nostra lista d'attesa VIP. Avrai l'opportunità di pre-ordinare, ricevere sconti speciali e accedere a contenuti esclusivi prima del lancio ufficiale. Non perdere l'occasione di trasformare i tuoi spazi con un'illuminazione che non solo illumina, ma ispira e nutre. Il futuro è luminoso, e sta per iniziare."
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente 1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Agente 1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Scrivi sul documento",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Salva dati",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente 1": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Agente 1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "0edebe28-88fd-4b5e-b713-759a71317287",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "285e6b7035d57255323414f2adfae0530b9d9fde4f34f40ef0775256340f9783"
+  },
+  "id": "ulYqiHoPVo1PC3aC",
+  "tags": [
+    {
+      "updatedAt": "2026-04-04T22:53:31.188Z",
+      "createdAt": "2026-04-04T22:53:31.188Z",
+      "id": "QtufuJPgy1naa6cW",
+      "name": "Data Table"
+    },
+    {
+      "updatedAt": "2026-04-04T23:05:54.660Z",
+      "createdAt": "2026-04-04T23:05:54.660Z",
+      "id": "TOSUCdPEgLlufg6Q",
+      "name": "Google Calendar"
+    },
+    {
+      "updatedAt": "2026-04-02T03:02:21.287Z",
+      "createdAt": "2026-04-02T03:02:21.287Z",
+      "id": "gqH2eJsEuq2iGZkb",
+      "name": "Notion"
+    },
+    {
+      "updatedAt": "2026-04-02T03:02:46.710Z",
+      "createdAt": "2026-04-02T03:02:46.710Z",
+      "id": "oR1knSWoKLbEg04u",
+      "name": "IA"
+    },
+    {
+      "updatedAt": "2026-04-05T05:27:11.862Z",
+      "createdAt": "2026-04-04T22:54:02.888Z",
+      "id": "rk5ptMN2qRcFq2Ao",
+      "name": "Sotto-flussi"
+    },
+    {
+      "updatedAt": "2026-04-03T22:02:30.420Z",
+      "createdAt": "2026-04-03T22:02:30.420Z",
+      "id": "vEzaPJhvxUWx7lot",
+      "name": "Google Docs"
+    }
+  ]
+}
