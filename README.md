@@ -1,9 +1,9 @@
-###### W11 - Multi-agent orchestrations
+# W11 - Multi-agent orchestrations
 
-A multi-agent workflow that automatically generates a brand tone and editorial plan for an advertising campaign, saves everything in a Google Doc, and then generates contents related to the editorial plan, reviewing them too. The content is then published to Notion and dedicated events are created on Google Calendar.
+A multi-agent workflow that automatically generates a brand tone and editorial plan for an advertising campaign, saves everything in a **Google Doc**, and then generates contents related to the editorial plan, reviewing them too. The content is then published to **Notion** and dedicated events are created on **Google Calendar**.
 
 
-###### How to use the project:
+## How to use the project:
 
 **The project was created in n8n.**
 
@@ -12,6 +12,6 @@ A multi-agent workflow that automatically generates a brand tone and editorial p
 
 
 
-###### Tools and technologies used:
+## Tools and technologies used:
 
 **n8n, AI, Google Docs, Notion, Google Calendar, Agentic.**
